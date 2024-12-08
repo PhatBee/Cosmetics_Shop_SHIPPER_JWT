@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div class="form-group">
+        <label for="username">Tên người dùng:</label>
+        <input type="text" class="form-control" id="username" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Mật khẩu:</label>
+        <input type="password" class="form-control" id="password" required>
+    </div>
+
+    <button type="submit"  id="loginBtn">Login</button>
+
+<!--ajax-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    // api cho đăng nhập
+    $('#loginBtn').click(function () {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        console.log(username, password);
+        $.ajax({
+            url: '/api/v1/auth/login', // Đường dẫn đến file xử lý đăng nhập
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({username: username, password: password}),
+            success: function (response) {
+                try {
+                    localStorage.setItem('token', JSON.stringify(response));
+                    alert("Đăng nhập thành công!");
+                } catch (e) {
+                    // Xử lý lỗi nếu không thể phân tích JSON
+                    console.log(response); // Hiển thị toàn bộ phản hồi lỗi (sử dụng response ban đầu)
+                }
+            },
+            error: function (xhr, status, error) {
+                    alert(xhr.responseText);
+            }
+        });
+    });
+
+</script>
+</body>
+</html>
